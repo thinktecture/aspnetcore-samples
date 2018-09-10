@@ -1,4 +1,4 @@
-using FlightFinder.Shared;
+﻿using FlightFinder.Shared;
 using Microsoft.AspNetCore.Blazor;
 using System;
 using System.Collections.Generic;
@@ -29,6 +29,8 @@ namespace FlightFinder.Client.Services
         {
             http = httpInstance;
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+
+            LoadShortlist();
         }
 
         public async Task Search(SearchCriteria criteria)
@@ -60,6 +62,14 @@ namespace FlightFinder.Client.Services
         private void StoreShortlist()
         {
             _storage.SetItem("shortlist", shortlist);
+        }
+
+        private async Task LoadShortlist()
+        {
+            var list = await _storage.GetItem<List<Itinerary>>("shortlist");
+
+            shortlist.AddRange(list);
+            NotifyStateChanged();
         }
     }
 }
