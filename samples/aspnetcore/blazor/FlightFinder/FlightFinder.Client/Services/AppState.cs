@@ -44,15 +44,22 @@ namespace FlightFinder.Client.Services
         public void AddToShortlist(Itinerary itinerary)
         {
             shortlist.Add(itinerary);
+            StoreShortlist();
             NotifyStateChanged();
         }
 
         public void RemoveFromShortlist(Itinerary itinerary)
         {
             shortlist.Remove(itinerary);
+            StoreShortlist();
             NotifyStateChanged();
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();
+
+        private void StoreShortlist()
+        {
+            _storage.SetItem("shortlist", shortlist);
+        }
     }
 }
