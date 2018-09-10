@@ -1,9 +1,10 @@
-﻿using FlightFinder.Shared;
+using FlightFinder.Shared;
 using Microsoft.AspNetCore.Blazor;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazor.Extensions.Storage.Interfaces;
 
 namespace FlightFinder.Client.Services
 {
@@ -22,9 +23,12 @@ namespace FlightFinder.Client.Services
 
         // Receive 'http' instance from DI
         private readonly HttpClient http;
-        public AppState(HttpClient httpInstance)
+        private readonly IStorage _storage;
+
+        public AppState(HttpClient httpInstance, IStorage storage)
         {
             http = httpInstance;
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
         public async Task Search(SearchCriteria criteria)
